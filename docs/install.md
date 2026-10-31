@@ -1,6 +1,6 @@
 # Install self-hosted AI agents from an open-source stack
 
-Kortix is the open-source AI Operating System, and a self-hosted instance is the full platform on a server you control. The order below works, and each step names the failure a wrong answer leaves behind.
+Kortix is the open-source CompanyOS, and a self-hosted instance is the full platform on a server you control. The order below works, and each step names the failure a wrong answer leaves behind.
 
 ## Point DNS at the server first
 
