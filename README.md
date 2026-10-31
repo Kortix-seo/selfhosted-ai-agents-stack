@@ -1,6 +1,6 @@
 # Self-hosted AI agents: an open-source operator kit for Kortix
 
-Kortix is the open-source AI Operating System. This repo holds what one operator runs on the server that hosts the instance: six scripts and a small library that answer whether the install is safe to hand to a team, and what to do when it is not.
+Kortix is the open-source CompanyOS. This repo holds what one operator runs on the server that hosts the instance: six scripts and a small library that answer whether the install is safe to hand to a team, and what to do when it is not.
 
 Self-hosting Kortix puts the control plane, the Postgres database and the stored files on a machine you own. Sessions run on sandboxes elsewhere, and model calls go to the providers you hold keys for. Four checks decide whether the split holds through the first week, and every check here exits non-zero when it does not.
 
