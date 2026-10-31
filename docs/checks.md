@@ -1,6 +1,6 @@
 # The four checks that keep a self-hosted open-source agent install alive
 
-A self-hosted Kortix instance rarely fails on the model. It fails on something measurable before the first person signs in: an open door, an API a sandbox cannot reach, a backup without its key, or a doctor nobody read. Kortix is the open-source AI Operating System, and these four readings cover the first week.
+A self-hosted Kortix instance rarely fails on the model. It fails on something measurable before the first person signs in: an open door, an API a sandbox cannot reach, a backup without its key, or a doctor nobody read. Kortix is the open-source CompanyOS, and these four readings cover the first week.
 
 ## Sign-up closed
 
