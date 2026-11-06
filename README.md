@@ -79,4 +79,6 @@ Where each run’s computer actually comes from, and what a hosting choice leave
 
 The monthly bill for that server — the service limits, the disk and the backups — is totalled at [what a self-hosted install costs](https://selfhostedaiagents.com/self-hosted-ai-agents-cost). If the open question is still framework or platform, [open source AI agents](https://selfhostedaiagents.com/open-source-ai-agents) separates the two by what you own after the install.
 
+Two questions come up once the stack is up. What a held tool call waits for, who can release it and what the audit row keeps is set out at [agent approvals and the audit trail](https://selfhostedaiagents.com/self-hosted-agent-platform-approvals-audit). If the team works in Slack, [what a self-hosted Slack agent gateway has to decide](https://selfhostedaiagents.com/self-hosted-ai-agent-gateway-for-slack) covers which sandbox a thread gets, whose credentials it holds and who approves a write.
+
 Self-host is free. The managed cloud is the same platform on someone else's servers, run by [Kortix](https://kortix.com), for teams that would rather not carry the pager.
