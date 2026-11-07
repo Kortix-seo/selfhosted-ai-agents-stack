@@ -71,7 +71,7 @@ This is not monitoring. Nothing pages anyone: `verify-all.sh` exits 1 and leaves
 
 ## Where the rest of the setup lives
 
-The full install path, every environment variable and the command list are in the [Kortix self-hosting docs](https://kortix.com/docs/developers#self-hosting). The same install is walked through in order at [selfhostedaiagents.com](https://selfhostedaiagents.com): the three DNS records, the five commands, the four failures that show up after the stack is up, and the update window. It is the long version of the Quickstart. The [Kortix blog](https://kortix.com/blog/self-hosted-ai-agents) covers what each check protects against on a live instance. The source is at [Kortix on GitHub](https://github.com/kortix-ai/suna).
+The full install path, every environment variable and the command list are in the [Kortix self-hosting docs](https://kortix.com/docs/developers#self-hosting). The same install is walked through in order at [selfhostedaiagents.com](https://selfhostedaiagents.com): the three DNS records, the five commands, the four failures that show up after the stack is up, and the update window. It is the long version of the Quickstart. The [Kortix blog](https://kortix.com/blog/self-hosted-ai-agents) covers what each check protects against on a live instance. The source is at [Kortix on GitHub](https://github.com/kortix-ai/CompanyOS).
 
 If the question is which stack to run rather than how to check the one you have, [the same site compares six self-hosted installs](https://selfhostedaiagents.com/best-self-hosted-ai-agents) by what each one exposes on the server after the first minute: the Compose file, the ports, the sandboxing default and the licence each ships under.
 
