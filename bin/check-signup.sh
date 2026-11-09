@@ -35,11 +35,12 @@ print(f"disable_signup={signup_off} mailer_autoconfirm={autoconfirm} external={'
 if signup_off:
     print("CLOSED — only an existing user or a platform admin can create an account"); sys.exit(0)
 if autoconfirm:
-    print("OPEN — sign-up accepts any address and confirms it without an email.")
-    print("      Whoever signs up first with an admin-listed address becomes platform admin.")
-    print("      fix: kortix self-host env set DISABLE_SIGNUP=true   (or set EMAIL_URL), then kortix self-host start")
-    sys.exit(1)
-print("OPEN, email-verified — sign-up works but each address must prove itself over email")
+    print("AUTO-CONFIRM ON — sign-up confirms an address without an email.")
+    print("      With KORTIX_SIGNUP_MODE=open that admits any address; invite mode still")
+    print("      requires a pending invitation. Admin addresses cannot be claimed by sign-up.")
+    print("      read the mode locally: check-signup.sh --instance <name>")
+    sys.exit(2)
+print("INVITE or EMAIL-VERIFIED — sign-up requires an invitation or a confirmed address")
 sys.exit(0)
 PY
 }
@@ -53,18 +54,33 @@ if [ "$target" = "--instance" ]; then
   fi
   disable=$(env_get "$envfile" DISABLE_SIGNUP)
   email_url=$(env_get "$envfile" EMAIL_URL)
+  mode=$(env_get "$envfile" KORTIX_SIGNUP_MODE)
+  # A domain or tunnel instance without EMAIL_URL defaults to invite.
+  [ -z "$mode" ] && [ -z "$email_url" ] && mode="invite (default)"
   echo "instance: $INSTANCE ($envfile)"
   if [ "$disable" = "true" ]; then
     ok "DISABLE_SIGNUP=true — sign-up closed"
     exit 0
   fi
-  if [ -n "$email_url" ]; then
-    ok "EMAIL_URL is set — sign-up requires a confirmed email address"
-    exit 0
-  fi
-  fail "sign-up open and email confirmation off (no DISABLE_SIGNUP, no EMAIL_URL)"
-  note "until this is fixed, anyone who reaches the instance can create a confirmed account for any address, the admin address included"
-  exit 1
+  case "$mode" in
+    closed)
+      ok "KORTIX_SIGNUP_MODE=closed — nobody creates an account by signing up"
+      exit 0 ;;
+    invite*)
+      ok "KORTIX_SIGNUP_MODE=$mode — only an address with a pending invitation creates an account"
+      exit 0 ;;
+    open)
+      if [ -n "$email_url" ]; then
+        ok "KORTIX_SIGNUP_MODE=open with EMAIL_URL — anyone may sign up and must confirm the address"
+        exit 0
+      fi
+      fail "KORTIX_SIGNUP_MODE=open and no EMAIL_URL — any address is confirmed without an email"
+      note "fix: kortix self-host env set KORTIX_SIGNUP_MODE=invite   (or set EMAIL_URL)"
+      exit 1 ;;
+    *)
+      fail "unknown KORTIX_SIGNUP_MODE=$mode — expected invite, open or closed"
+      exit 2 ;;
+  esac
 fi
 
 base="${target%/}"
