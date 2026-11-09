@@ -39,7 +39,8 @@ FIX = {
   "instance-dir": "the instance directory moved — run kortix self-host configure (or env set) to re-anchor it",
   "email-url": "EMAIL_URL does not parse — use smtp://user:pass@host:587, smtps://, resend://, ses:// or mailtrap://",
   "preview-origins": "add the wildcard DNS record, then: kortix self-host env set KORTIX_PREVIEW_BASE_DOMAIN=p.<domain> / start",
-  "open-sign-up": "anyone who reaches the instance can create a confirmed account: kortix self-host env set DISABLE_SIGNUP=true (or set EMAIL_URL), then kortix self-host start",
+  "wildcard-tls": "domain mode still gets one certificate per host: run kortix self-host tls wildcard and add the DNS records it prints (UDP and TCP 53 open)",
+  "open-sign-up": "sign-up is open with email confirmation off: kortix self-host env set KORTIX_SIGNUP_MODE=invite (or set EMAIL_URL)",
 }
 try:
     data = json.loads(raw)
