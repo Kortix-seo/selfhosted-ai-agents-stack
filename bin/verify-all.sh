@@ -5,7 +5,7 @@
 #   ./bin/verify-all.sh kortix.example.com
 #   ./bin/verify-all.sh --instance default          # no network, local .env only
 #
-# Runs the checks an install quietly drifts away from: the doctor's seven,
+# Runs the checks an install quietly drifts away from: the doctor's nine,
 # the sign-up decision, backup freshness and the update schedule. Exit 0 when
 # everything holds, 1 when something needs a person.
 set -uo pipefail
