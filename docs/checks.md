@@ -2,19 +2,21 @@
 
 A self-hosted Kortix instance rarely fails on the model. It fails on something measurable before the first person signs in: an open door, an API a sandbox cannot reach, a backup without its key, or a doctor nobody read. Kortix is the open-source CompanyOS, and these four readings cover the first week.
 
-## Sign-up closed
+## Who can sign up
 
-A domain-mode instance is reachable by design, and a new one confirms sign-ups without email. Until you set `EMAIL_URL` or `DISABLE_SIGNUP=true`, the auth service will confirm an account for any address that asks, including the address you made admin. Whoever claims an admin-listed address first becomes platform admin.
+A domain or tunnel instance without `EMAIL_URL` starts at `KORTIX_SIGNUP_MODE=invite`: the auth service creates an account only for an address with a pending invitation, and the admin account comes from `kortix self-host admin add`. Neither the admin address nor any address in `KORTIX_PLATFORM_ADMIN_EMAILS` can be claimed by signing up.
+
+`open` admits anyone, and it is the default on a laptop instance and on any instance with `EMAIL_URL`, where every new account must confirm its address. Without `EMAIL_URL`, auth confirms each sign-up without sending mail, so an open instance lets the first person to type an address hold it. That is why a public instance starts at `invite`.
 
 ```
-$ ./bin/check-signup.sh https://kortix.example.com
-disable_signup=False mailer_autoconfirm=True external=github
-OPEN — sign-up accepts any address and confirms it without an email.
+$ ./bin/check-signup.sh --instance default
+instance: default (/home/ops/.config/kortix/self-host/default/.env)
+KORTIX_SIGNUP_MODE=invite — only an address with a pending invitation creates an account
 ```
 
-`check-signup.sh` reads `/auth/v1/settings` and exits 0 for closed or email-verified, 1 for open, 2 when it cannot tell. With `--instance <name>` it reads `DISABLE_SIGNUP` and `EMAIL_URL` from `.env`, which works when the API is down.
+`check-signup.sh` reads `/auth/v1/settings` and exits 0 when sign-up is invite-only, closed or email-verified, 1 when it admits unverified addresses, 2 when it cannot tell. With `--instance <name>` it reads `DISABLE_SIGNUP`, `EMAIL_URL` and `KORTIX_SIGNUP_MODE` from `.env`, which works when the API is down.
 
-Run it after the first admin sign-in and after updates. Closing it takes `kortix self-host env set DISABLE_SIGNUP=true` and a restart.
+Run it after the first admin sign-in and after updates. Closing sign-up takes `kortix self-host env set KORTIX_SIGNUP_MODE=closed`.
 
 ## An API a sandbox can reach
 
@@ -52,20 +54,22 @@ $ ./bin/restore.sh backups/kortix-default-20261021T200633Z.tgz --instance defaul
 
 ## A doctor someone reads
 
-Seven checks: `docker`, `docker-compose`, `compose-config`, `instance-dir`, `email-url`, `preview-origins`, `open-sign-up`. Six of seven is the usual first result.
+Nine checks: `docker`, `docker-compose`, `compose-config`, `capture-store`, `instance-dir`, `email-url`, `preview-origins`, `wildcard-tls`, `open-sign-up`. Eight of nine is the usual first result.
 
 ```
 $ ./bin/doctor.sh default
  ok   docker
  ok   docker-compose
  ok   compose-config
+ ok   capture-store
  ok   instance-dir
  ok   email-url
  FAIL preview-origins: domain mode with KORTIX_PREVIEW_BASE_DOMAIN empty
       fix: add the wildcard DNS record, then: kortix self-host env set KORTIX_PREVIEW_BASE_DOMAIN=p.<domain> / start
+ ok   wildcard-tls
  ok   open-sign-up
 
-6/7 passed
+8/9 passed
 ```
 
 `doctor.sh` decodes `--json` into that table, prints a fix line for the failure, and keeps a timestamped report under `reports/`. Exit 0 means all passed, 1 a failure. Read it before anyone signs in, and after updates. An install that only ran the bootstrap leaves both outward-facing checks failing.
