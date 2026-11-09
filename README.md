@@ -30,10 +30,10 @@ kortix self-host start
 
 `preflight.sh` checks DNS, ports, disk and memory before anything is written. `init` writes `docker-compose.yml`, `.env`, a `Caddyfile` and `updater.sh` into `~/.config/kortix/self-host/default/`. `configure` asks for the admin address, `PLATINUM_API_KEY` and the preview domain `p.kortix.example.com`, and `start` applies the answers. Then do these before you invite anyone:
 
-1. Open `https://kortix.example.com` and sign up with the admin address.
+1. Create the admin account: `kortix self-host admin add you@example.com` prints a one-time password. Sign in at `https://kortix.example.com/auth` with it and change it. A sign-up cannot claim an address in `KORTIX_PLATFORM_ADMIN_EMAILS`.
 2. Connect GitHub at `/admin/git`. Kortix creates every project repository through that identity.
 3. Create a project at `/new`, then use the project menu, Switch Project, Create an account to make the team account. Add a model key under Customize, Models, Providers.
-4. Close the door: `kortix self-host env set DISABLE_SIGNUP=true`, then `kortix self-host start`, then `./bin/check-signup.sh https://kortix.example.com` until it reports CLOSED.
+4. Check who can sign up: a domain instance without `EMAIL_URL` starts at `KORTIX_SIGNUP_MODE=invite`, where only an address with a pending invitation creates an account. `./bin/check-signup.sh https://kortix.example.com` reports what the auth API answers, and `--instance default` reads the mode from `.env`. To refuse every new sign-up, run `kortix self-host env set KORTIX_SIGNUP_MODE=closed`; the API restarts and applies it.
 5. Take the first backup with `sudo ./bin/backup.sh default /var/backups/kortix` and copy the archive, its `.sha256` and its `.manifest.json` off the server.
 6. Put `./bin/verify-all.sh https://kortix.example.com` in cron for the weekly pass, and read its exit code.
 
@@ -43,7 +43,7 @@ kortix self-host start
 | --- | --- |
 | `preflight.sh <domain>` | DNS, ports 80 and 443, disk, memory, tooling before `init` |
 | `doctor.sh [instance]` | Decodes doctor JSON, prints a fix per failure, saves a report |
-| `check-signup.sh <url>` | Asks `/auth/v1/settings` whether a stranger can join |
+| `check-signup.sh <url>` | Asks `/auth/v1/settings` how sign-up behaves, and reads the mode from `.env` |
 | `backup.sh [instance] [dest]` | Stops the stack, archives the instance, records the key fingerprint |
 | `restore.sh <archive>` | Checks checksum and key, refuses a mismatched key |
 | `verify-all.sh <url>` | Sign-up, doctor, update status and backup age in one pass |
